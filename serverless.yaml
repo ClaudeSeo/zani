@@ -1,0 +1,43 @@
+service: go-to-outback
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage, 'development'}
+  region: ${opt:region, 'ap-northeast-2'}
+  logRetentionInDays: 30
+  versionFunctions: false
+  timeout: 30
+  memorySize: 128
+  deploymentBucket:
+    name: claude.serverless.${self:provider.region}.deploys
+    serverSideEncryption: AES256
+  environment:
+    TZ: Asia/Seoul
+    NODE_ENV: ${opt:stage, 'development'}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+functions:
+  register:
+    handler: src/api/register/controller.exec
+    description: '깃헙 웹훅'
+    events:
+      - http:
+          path: /
+          method: post
+          cors: false
+
+  notifier:
+    handler: src/task/notifier.exec
+    description: '커밋 알림 발송'
+    events:
+      - schedule: cron(0 13 * * ? *)
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: false
+    packager: 'npm'
