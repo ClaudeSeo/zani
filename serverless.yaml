@@ -15,6 +15,9 @@ provider:
   environment:
     TZ: Asia/Seoul
     NODE_ENV: ${opt:stage, 'development'}
+  tracing:
+    lambda: true
+    apiGateway: true
 
 plugins:
   - serverless-webpack
