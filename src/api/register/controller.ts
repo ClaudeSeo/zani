@@ -1,5 +1,4 @@
 import { upsertCommitHistory } from './service';
-
 import { PushEvent } from './types';
 
 interface HTTPResponse {
