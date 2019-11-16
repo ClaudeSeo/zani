@@ -1,10 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
 import moment from 'moment';
 import config from '../../config/environment';
+import { COMMIT_TABLE_NAME, REPOSITORY_TABLE_NAME } from '../../config/tables';
 import { Commit, Repository } from '../types';
 
-const REPOSITORY_TABLE_NAME = `claude.${config.env}.repository`;
-const COMMIT_TABLE_NAME = `claude.${config.env}.commits`;
 const LIMIT = 100;
 
 const docClient = new DynamoDB.DocumentClient({
