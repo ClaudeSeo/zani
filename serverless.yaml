@@ -9,6 +9,13 @@ provider:
   versionFunctions: false
   timeout: 30
   memorySize: 128
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:*'
+      Resource:
+        - 'claude.${self:provider.stage}.commits'
+        - 'claude.${self:provider.stage}.repository'
   deploymentBucket:
     name: claude.serverless.${self:provider.region}.deploys
     serverSideEncryption: AES256
