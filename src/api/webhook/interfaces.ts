@@ -39,7 +39,7 @@ interface Commit {
     };
     added: string[];
     removed: string[];
-    modified: [];
+    modified: string[];
 }
 
 export interface PushEvent {
@@ -65,6 +65,12 @@ export interface PingEvent {
         updated_at: string;
     }
     repository: Repository;
+}
+
+export interface User {
+    uid: string;
+    createdAt: number;
+    secrets: string;
 }
 
 export type GithubEvent = 'push' | 'ping';

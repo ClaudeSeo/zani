@@ -47,9 +47,13 @@ functions:
     description: 'github webhook'
     events:
       - http:
-          path: /hooks
+          path: /u/{uid}/hooks
           method: post
           cors: false
+          request:
+            parameters:
+              paths:
+                uid: true
 
   notifier:
     handler: src/task/notifier.exec
