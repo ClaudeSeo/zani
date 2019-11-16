@@ -1,3 +1,5 @@
+[![Build Status](https://github.com/ClaudeSeo/zani/workflows/Deploy/badge.svg)](https://github.com/ClaudeSeo/zani/actions?query=Deploy)
+
 # Zani
 
 - 1일 1커밋을 하기 위한 목적으로 개발되었으며, 하루에 한번 이상 커밋을 하지 않을 경우 알림을 주는 프로젝트이다.
