@@ -20,7 +20,13 @@ provider:
               - 'arn:aws:dynamodb'
               - Ref: 'AWS::Region'
               - Ref: 'AWS::AccountId'
-              - 'table/claude.${self:provider.stage}.commits'
+              - 'table/claude.${self:provider.stage}.commit'
+        - 'Fn::Join':
+            - ':'
+            - - 'arn:aws:dynamodb'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - 'table/claude.${self:provider.stage}.user'
         - 'Fn::Join':
             - ':'
             - - 'arn:aws:dynamodb'
