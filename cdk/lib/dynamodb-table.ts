@@ -2,6 +2,8 @@ import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { NODE_ENV } from './constants';
 
+const DEFAULT_CAPACITY = 1;
+
 export class DynamodbTable extends Construct {
     private readonly commitTable: Table;
     private readonly userTable: Table;
@@ -21,6 +23,8 @@ export class DynamodbTable extends Construct {
             },
             tableName: `claude.${NODE_ENV}.commit`,
             removalPolicy: RemovalPolicy.DESTROY,
+            readCapacity: DEFAULT_CAPACITY,
+            writeCapacity: DEFAULT_CAPACITY,
         });
 
         this.userTable = new Table(this, 'UserTable', {
@@ -30,6 +34,8 @@ export class DynamodbTable extends Construct {
             },
             tableName: `claude.${NODE_ENV}.user`,
             removalPolicy: RemovalPolicy.DESTROY,
+            readCapacity: DEFAULT_CAPACITY,
+            writeCapacity: DEFAULT_CAPACITY,
         });
 
         this.repositoryTable = new Table(this, 'RepositoryTable', {
@@ -39,6 +45,8 @@ export class DynamodbTable extends Construct {
             },
             tableName: `claude.${NODE_ENV}.repository`,
             removalPolicy: RemovalPolicy.DESTROY,
+            readCapacity: DEFAULT_CAPACITY,
+            writeCapacity: DEFAULT_CAPACITY,
         });
     }
 
