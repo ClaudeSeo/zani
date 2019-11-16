@@ -1,4 +1,4 @@
-service: go-to-outback
+service: zani
 
 provider:
   name: aws
