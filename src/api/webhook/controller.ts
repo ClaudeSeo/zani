@@ -40,11 +40,11 @@ const buildResponse = (resp: any, statusCode: number = 200): HTTPResponse => {
 };
 
 export const exec = async (event: Event, context: any): Promise<any> => {
-    const { headers, queryStringParameters } = event;
+    const { headers, pathParameters } = event;
     const body = JSON.parse(event.body);
     const eventType = headers?.['X-GitHub-Event'];
     const signature = headers?.['X-Hub-Signature'];
-    const uid = queryStringParameters?.uid;
+    const uid = pathParameters?.uid;
 
     logger.info({ message: 'Request Event', body, headers, uid });
 
