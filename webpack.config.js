@@ -1,8 +1,11 @@
 const path = require("path");
+const webpack = require('webpack');
 const slsw = require('serverless-webpack');
 
+const stage = slsw.lib.options.stage !== 'development' ? 'production' : 'development';
+
 module.exports = {
-    mode: slsw.lib.options.stage,
+    mode: stage,
     entry: slsw.lib.entries,
     output: {
         libraryTarget: "commonjs",
@@ -20,5 +23,11 @@ module.exports = {
     },
     resolve: {
         extensions: [".ts", ".js"]
-    }
+    },
+    plugins: [
+        new webpack.EnvironmentPlugin([
+            'NODE_ENV',
+            'TZ',
+        ])
+    ]
 };

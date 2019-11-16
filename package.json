@@ -1,12 +1,13 @@
 {
   "name": "zani",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "main": "index.js",
   "scripts": {
     "offline:dev": "bnr offline:dev",
     "invoke:notifier": "bnr invoke:notifier",
-    "deploy:prod": "bnr deploy:prod"
+    "deploy:prod": "bnr deploy:prod",
+    "deploy:test": "bnr deploy:test"
   },
   "betterScripts": {
     "offline:dev": {
@@ -25,6 +26,12 @@
       "command": "sls deploy --stage production",
       "env": {
         "NODE_ENV": "production"
+      }
+    },
+    "deploy:test": {
+      "command": "sls deploy --stage test",
+      "env": {
+        "NODE_ENV": "test"
       }
     }
   },
