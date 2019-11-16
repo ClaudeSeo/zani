@@ -1,11 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
 import moment from 'moment';
-import config from '../../../config/environment';
+import { REPOSITORY_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
 import { PingEvent } from '../interfaces';
 
-const TABLE_NAME = `claude.${config.env}.repository`;
 const logger = LoggerManager.getLogger('register-repository.service');
 
 export const exec = async (data: PingEvent): Promise<void> => {
@@ -13,7 +12,7 @@ export const exec = async (data: PingEvent): Promise<void> => {
     const now = moment();
 
     const payload: DynamoDB.DocumentClient.PutItemInput = {
-        TableName: TABLE_NAME,
+        TableName: REPOSITORY_TABLE_NAME,
         Item: {
             repoId: repository.node_id,
             name: repository.name,

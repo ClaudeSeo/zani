@@ -1,10 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
-import config from '../../../config/environment';
+import { COMMIT_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
 import { PushEvent } from '../interfaces';
 
-const TABLE_NAME = `claude.${config.env}.commit`;
 const logger = LoggerManager.getLogger('upsert-commit-history.service');
 
 export const exec = async (props: PushEvent): Promise<void> => {
@@ -15,7 +14,7 @@ export const exec = async (props: PushEvent): Promise<void> => {
     }
 
     const params: DynamoDB.DocumentClient.PutItemInput = {
-        TableName: TABLE_NAME,
+        TableName: COMMIT_TABLE_NAME,
         Item: {
             repoId: repository.node_id,
             createdAt: new Date().getTime(),

@@ -1,15 +1,14 @@
 import { DynamoDB } from 'aws-sdk';
-import config from '../../../config/environment';
+import { USER_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
 import { User } from '../interfaces';
 
-const TABLE_NAME = `claude.${config.env}.user`;
 const logger = LoggerManager.getLogger('get-user.service');
 
 export const exec = async (uid: string): Promise<User | null> => {
     const payload: DynamoDB.DocumentClient.QueryInput = {
-        TableName: TABLE_NAME,
+        TableName: USER_TABLE_NAME,
         KeyConditionExpression: '#uid = :uid',
         ExpressionAttributeNames: {
             '#uid': 'uid',
