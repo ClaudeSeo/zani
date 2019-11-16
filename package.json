@@ -4,9 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "offline:dev": "sls offline --stage development",
-    "invoke:notifier": "sls invoke local -f notifier --stage development",
-    "deploy:prod": "sls deploy --stage production"
+    "offline:dev": "bnr offline:dev",
+    "invoke:notifier": "bnr invoke:notifier",
+    "deploy:prod": "bnr deploy:prod"
+  },
+  "betterScripts": {
+    "offline:dev": {
+      "command": "sls offline --stage development",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "invoke:notifier": {
+      "command": "sls invoke local -f notifier --stage development",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "deploy:prod": {
+      "command": "sls deploy --stage production",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
   },
   "repository": {
     "type": "git",
