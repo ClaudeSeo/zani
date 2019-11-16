@@ -1,13 +1,14 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitAny": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES2018",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "strict": true,
+        "noImplicitAny": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
