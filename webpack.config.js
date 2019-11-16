@@ -25,9 +25,8 @@ module.exports = {
         extensions: [".ts", ".js"]
     },
     plugins: [
-        new webpack.EnvironmentPlugin([
-            'NODE_ENV',
-            'TZ',
-        ])
+        new webpack.EnvironmentPlugin({
+            ...slsw.lib.serverless.service.provider.environment,
+        })
     ]
 };
