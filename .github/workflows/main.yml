@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         uses: actions/npm@master
-        if: stpes.depends-cache.outputs.cache-hit != 'true'
+        if: steps.depends-cache.outputs.cache-hit != 'true'
         with:
           args: install
 
