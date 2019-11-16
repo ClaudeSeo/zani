@@ -14,6 +14,7 @@ interface Repository {
         gravatar_id: string;
         url: string;
     };
+    description: string;
     created_at: number;
     updated_at: string;
     pushed_at: number;
@@ -31,6 +32,14 @@ interface Commit {
         email: string;
         username: string;
     };
+    commiter: {
+        name: string;
+        email: string;
+        username: string;
+    };
+    added: string[];
+    removed: string[];
+    modified: [];
 }
 
 export interface PushEvent {
@@ -43,3 +52,19 @@ export interface PushEvent {
     head_commit: Commit;
     repository: Repository;
 }
+
+export interface PingEvent {
+    zen: string;
+    hook_id: string;
+    hook: {
+        type: string;
+        id: number;
+        name: string;
+        active: boolean;
+        created_at: string;
+        updated_at: string;
+    }
+    repository: Repository;
+}
+
+export type GithubEvent = 'push' | 'ping';
