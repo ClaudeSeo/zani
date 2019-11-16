@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Cache node_modules
-        uses: actions/cache@1
+        uses: actions/cache@v1
         id: depends-cache
         with:
           path: node_modules
