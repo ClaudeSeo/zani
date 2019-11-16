@@ -1,6 +1,6 @@
 {
   "name": "zani",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ClaudeSeo/go-to-outback.git"
+    "url": "git+https://github.com/ClaudeSeo/zani.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ClaudeSeo/go-to-outback/issues"
+    "url": "https://github.com/ClaudeSeo/zani/issues"
   },
-  "homepage": "https://github.com/ClaudeSeo/go-to-outback#readme",
+  "homepage": "https://github.com/ClaudeSeo/zani#readme",
   "devDependencies": {
     "@types/moment": "^2.13.0",
     "@types/node": "^12.12.6",
