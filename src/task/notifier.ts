@@ -1,7 +1,7 @@
 import { Repository } from './types';
 import { sendTelegramMessage, getTarget } from './service';
 
-type ServiceType = 'nudge'|'warning'|'detect';
+type ServiceType = 'nudge' | 'warning' | 'detect';
 
 interface Props {
     type: ServiceType;

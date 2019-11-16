@@ -50,7 +50,7 @@ const getRepositories = async (): Promise<Repository[]> => {
     return repositories;
 };
 
-const getCommit = async (repoId: string): Promise<Commit|null> => {
+const getCommit = async (repoId: string): Promise<Commit | null> => {
     const duration = moment().subtract(24, 'hours').valueOf();
     const payload: DynamoDB.DocumentClient.QueryInput = {
         TableName: COMMIT_TABLE_NAME,
