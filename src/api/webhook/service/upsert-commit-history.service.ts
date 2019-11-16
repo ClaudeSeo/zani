@@ -1,9 +1,11 @@
 import { DynamoDB } from 'aws-sdk';
 import config from '../../../config/environment';
 import { ddbClient } from '../../../component/aws';
+import { LoggerManager } from '../../../component/logger';
 import { PushEvent } from '../interfaces';
 
-const TABLE_NAME = `claude.${config.env}.commits`;
+const TABLE_NAME = `claude.${config.env}.commit`;
+const logger = LoggerManager.getLogger('upsert-commit-history.service');
 
 export const exec = async (props: PushEvent): Promise<void> => {
     const { head_commit: headCommit, repository } = props;
@@ -23,5 +25,6 @@ export const exec = async (props: PushEvent): Promise<void> => {
         },
     };
 
-    await ddbClient.put(params).promise();
+    const result = await ddbClient.put(params).promise();
+    logger.info('커밋 히스토리 작성 결과', { result });
 };

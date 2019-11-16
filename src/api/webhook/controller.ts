@@ -1,5 +1,5 @@
-import { registerRepository, upsertCommitHistory } from './service';
-import { GithubEvent, PingEvent, PushEvent } from './interfaces';
+import { getUser, registerRepository, upsertCommitHistory, validateSignature } from './service';
+import { GithubEvent, PingEvent, PushEvent, User } from './interfaces';
 import { LoggerManager } from '../../component/logger';
 
 const logger = LoggerManager.getLogger('webhook');
@@ -13,6 +13,7 @@ interface Header {
     'User-Agent': string;
     'X-GitHub-Delivery': string;
     'X-GitHub-Event'?: GithubEvent;
+    'X-Hub-Signature'?: string;
 }
 
 interface Event {
@@ -39,17 +40,30 @@ const buildResponse = (resp: any, statusCode: number = 200): HTTPResponse => {
 };
 
 export const exec = async (event: Event, context: any): Promise<any> => {
-    const { headers } = event;
+    const { headers, queryStringParameters } = event;
     const body = JSON.parse(event.body);
-    const githubEvent = headers?.['X-GitHub-Event'] ?? 'Unknown';
+    const eventType = headers?.['X-GitHub-Event'];
+    const signature = headers?.['X-Hub-Signature'];
+    const uid = queryStringParameters?.uid;
 
-    logger.info({ message: 'Request Event', body, headers });
+    logger.info({ message: 'Request Event', body, headers, uid });
 
-    // TODO: HMAC Signature Check
+    if (!uid || !signature) {
+        return buildResponse({ ok: false }, 401);
+    }
+
+    const user: User | null = await getUser(uid);
+    if (!user) {
+        return buildResponse({ ok: false }, 404);
+    }
+
+    const isValid = validateSignature(user.secrets, event.body, signature);
+    if (!isValid) {
+        return buildResponse({ ok: false }, 401);
+    }
 
     let fn: Promise<any>;
-
-    switch (githubEvent) {
+    switch (eventType) {
         case 'ping':
             fn = registerRepository(body as PingEvent);
             break;
