@@ -1,13 +1,11 @@
 import { DynamoDB } from 'aws-sdk';
 import config from '../../../config/environment';
-import { PushEvent } from '../types';
+import { ddbClient } from '../../../component/aws';
+import { PushEvent } from '../interfaces';
 
 const TABLE_NAME = `claude.${config.env}.commits`;
-const docClient = new DynamoDB.DocumentClient({
-    region: config.awsRegion,
-});
 
-export const exec = async (props: PushEvent) => {
+export const exec = async (props: PushEvent): Promise<void> => {
     const { head_commit: headCommit, repository } = props;
 
     if (!headCommit?.id) {
@@ -25,5 +23,5 @@ export const exec = async (props: PushEvent) => {
         },
     };
 
-    return docClient.put(params).promise();
+    await ddbClient.put(params).promise();
 };

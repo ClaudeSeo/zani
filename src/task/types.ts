@@ -1,7 +1,7 @@
 export interface Repository {
     repoId: string;
     notification: {
-        type: string|null;
+        type: string | null;
         chatId?: string;
         token?: string;
     }

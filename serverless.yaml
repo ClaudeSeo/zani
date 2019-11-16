@@ -42,18 +42,18 @@ plugins:
   - serverless-offline
 
 functions:
-  register:
-    handler: src/api/register/controller.exec
-    description: '깃헙 웹훅'
+  webhook:
+    handler: src/api/webhook/controller.exec
+    description: 'github webhook'
     events:
       - http:
-          path: /
+          path: /hooks
           method: post
           cors: false
 
   notifier:
     handler: src/task/notifier.exec
-    description: '커밋 알림 발송'
+    description: 'send notification about commit'
     events:
       - schedule:
           rate: cron(30 13 * * ? *)
