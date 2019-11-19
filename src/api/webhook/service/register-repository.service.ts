@@ -19,6 +19,11 @@ export const exec = async (data: PingEvent): Promise<void> => {
             description: repository.description,
             createdAt: now.valueOf(),
             active: false,
+            notification: {
+                type: null,
+                chatId: null,
+                token: null,
+            },
         },
     };
 
