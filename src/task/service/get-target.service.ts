@@ -1,32 +1,30 @@
 import { DynamoDB } from 'aws-sdk';
 import moment from 'moment';
-import config from '../../config/environment';
+import { ddbClient } from '../../component/aws';
 import { COMMIT_TABLE_NAME, REPOSITORY_TABLE_NAME } from '../../config/tables';
 import { Commit, Repository } from '../types';
 
 const LIMIT = 100;
 
-const docClient = new DynamoDB.DocumentClient({
-    region: config.awsRegion,
-});
-
 const getRepositories = async (): Promise<Repository[]> => {
     const repositories: Repository[] = [];
     const payload: DynamoDB.DocumentClient.ScanInput = {
         TableName: REPOSITORY_TABLE_NAME,
-        FilterExpression: 'attribute_not_exists(#notiType) and #notiType <> :null',
+        FilterExpression: 'attribute_not_exists(#notiType) and #notiType <> :null and #act = :act',
         ExpressionAttributeNames: {
             '#notiType': 'notification.type',
+            '#act': 'active',
         },
         ExpressionAttributeValues: {
             ':null': null,
+            ':act': true,
         },
         Limit: LIMIT,
     };
     let hasNext = false;
 
     do {
-        const result = await docClient.scan(payload).promise();
+        const result = await ddbClient.scan(payload).promise();
         if (!result.Items) {
             break;
         }
@@ -65,7 +63,7 @@ const getCommit = async (repoId: string): Promise<Commit | null> => {
         Limit: 1,
     };
 
-    const result = await docClient.query(payload).promise();
+    const result = await ddbClient.query(payload).promise();
     if ((result.Items?.length ?? 0) >= 0) {
         return result.Items![0] as Commit;
     }
