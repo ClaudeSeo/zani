@@ -35,6 +35,10 @@ const getRepositories = async (): Promise<Repository[]> => {
 
         const items = result.Items.map<Repository>(it => ({
             repoId: it.repoId,
+            name: it.name,
+            description: it.description,
+            createdAt: it.createdAt,
+            active: it.active,
             notification: {
                 type: it.notification.type,
                 ...it.notification,

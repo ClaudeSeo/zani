@@ -1,4 +1,6 @@
-import { Repository } from './types';
+import { createHash } from 'crypto';
+
+import { Notification, Repository } from './types';
 import { sendTelegramMessage, getTarget } from './service';
 
 type ServiceType = 'nudge' | 'warning' | 'detect';
@@ -7,20 +9,27 @@ interface Props {
     type: ServiceType;
 }
 
+interface TargetItem {
+    message: string[];
+    notification: Notification;
+}
+
+interface TargetGroup {
+    [key: string]: TargetItem;
+}
+
 const MESSAGES = Object.freeze({
-    nudge: '벌써 시간이 22시 30분입니다. 커밋 시간까지 얼마 안남았는걸요?',
-    warning: '23시 50분입니다. 10분 내로 커밋을 못한다면 아웃백을 사셔야해요.',
-    detect: '축하합니다. 아웃백을 사셔야겠어요 ^^',
+    nudge: '커밋 마감까지 1시간 30분 남았습니다.',
+    warning: '커밋 마감 10분 전입니다.',
+    detect: '1일 1커밋 미션을 수행하지 못했습니다.',
 });
 
-const sendMessages = (type: ServiceType) => async (target: Repository): Promise<void> => {
-    const message = MESSAGES[type];
-
+const sendMessages = async (target: TargetItem): Promise<void> => {
     switch (target.notification.type) {
         case 'telegram':
             await sendTelegramMessage({
                 chatId: target.notification.chatId!,
-                text: message,
+                text: target.message.join('\n'),
                 token: target.notification.token!,
             });
             break;
@@ -30,6 +39,21 @@ const sendMessages = (type: ServiceType) => async (target: Repository): Promise<
     }
 };
 
+const groupByMessages = (targets: Repository[], type: ServiceType) => targets.reduce<TargetGroup>((prev, curr) => {
+    const hashKey = `${curr.notification.type}${curr.notification.token}${curr.notification.chatId}`;
+    const hash = createHash('sha1').update(hashKey).digest('hex');
+
+    if (!prev[hash]) {
+        prev[hash] = {
+            message: [ MESSAGES[type], '*** 미션을 성공하지 못한 저장소 목록 ***' ],
+            notification: curr.notification,
+        };
+    }
+
+    prev[hash].message.push(`- ${curr.name}`);
+    return prev;
+}, {});
+
 export const exec = async (props: Props): Promise<void> => {
     const { type = 'nudge' } = props;
 
@@ -38,5 +62,6 @@ export const exec = async (props: Props): Promise<void> => {
         return;
     }
 
-    await Promise.all(targets.map(sendMessages(type)));
+    const messages = groupByMessages(targets, type);
+    await Promise.all(Object.values(messages).map(sendMessages));
 };
