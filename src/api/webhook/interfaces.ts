@@ -63,7 +63,7 @@ export interface PingEvent {
         active: boolean;
         created_at: string;
         updated_at: string;
-    }
+    };
     repository: Repository;
 }
 

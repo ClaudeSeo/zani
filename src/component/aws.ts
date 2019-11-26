@@ -1,5 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
+
 import config from '../config/environment';
 
 const serviceConfigOptions: ServiceConfigurationOptions = {

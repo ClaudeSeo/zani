@@ -1,12 +1,13 @@
+import { LoggerManager } from '../../component/logger';
+
 import { getUser, registerRepository, upsertCommitHistory, validateSignature } from './service';
 import { GithubEvent, PingEvent, PushEvent, User } from './interfaces';
-import { LoggerManager } from '../../component/logger';
 
 const logger = LoggerManager.getLogger('webhook');
 
 interface HTTPResponse {
-    statusCode: number,
-    body: string
+    statusCode: number;
+    body: string;
 }
 
 interface Header {
@@ -31,7 +32,7 @@ interface Event {
     isOffline: boolean;
 }
 
-const buildResponse = (resp: any, statusCode: number = 200): HTTPResponse => {
+const buildResponse = (resp: any, statusCode = 200): HTTPResponse => {
     const body = JSON.stringify(resp);
     return {
         body,
@@ -39,7 +40,7 @@ const buildResponse = (resp: any, statusCode: number = 200): HTTPResponse => {
     };
 };
 
-export const exec = async (event: Event, context: any): Promise<any> => {
+export const exec = async (event: Event): Promise<any> => {
     const { headers, pathParameters } = event;
     const body = JSON.parse(event.body);
     const eventType = headers?.['X-GitHub-Event'];

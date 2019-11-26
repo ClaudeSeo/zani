@@ -1,7 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
+
 import { COMMIT_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
+
 import { PushEvent } from '../interfaces';
 
 const logger = LoggerManager.getLogger('upsert-commit-history.service');
