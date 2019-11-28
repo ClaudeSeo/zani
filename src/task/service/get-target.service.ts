@@ -53,10 +53,14 @@ const getRepositories = async (): Promise<Repository[]> => {
 };
 
 const getCommit = async (repoId: string): Promise<Commit | null> => {
-    const duration = moment().subtract(24, 'hours').valueOf();
+    const duration = moment()
+        .subtract(1, 'days')
+        .hours(2)
+        .startOf('hours')
+        .valueOf();
     const payload: DynamoDB.DocumentClient.QueryInput = {
         TableName: COMMIT_TABLE_NAME,
-        KeyConditionExpression: '#repoId = :repoId and #t >= :t',
+        KeyConditionExpression: '#repoId = :repoId and #t > :t',
         ExpressionAttributeNames: {
             '#repoId': 'repoId',
             '#t': 'createdAt',

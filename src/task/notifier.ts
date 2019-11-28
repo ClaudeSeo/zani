@@ -19,8 +19,8 @@ interface TargetGroup {
 }
 
 const MESSAGES = Object.freeze({
-    nudge: '커밋 마감까지 1시간 30분 남았습니다.',
-    warning: '커밋 마감 10분 전입니다.',
+    nudge: '커밋 마감까지 2시간 남았습니다.',
+    warning: '커밋 마감 30분 전입니다.',
     detect: '1일 1커밋 미션을 수행하지 못했습니다.',
 });
 
