@@ -1,10 +1,16 @@
+export interface Notification {
+    type: string | null;
+    chatId?: string;
+    token?: string;
+}
+
 export interface Repository {
     repoId: string;
-    notification: {
-        type: string | null;
-        chatId?: string;
-        token?: string;
-    }
+    name: string;
+    description?: string | null;
+    createdAt: number;
+    active: boolean;
+    notification: Notification;
 }
 
 export interface Commit {

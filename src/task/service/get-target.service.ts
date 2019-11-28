@@ -1,5 +1,6 @@
-import { DynamoDB } from 'aws-sdk';
 import moment from 'moment';
+import { DynamoDB } from 'aws-sdk';
+
 import { ddbClient } from '../../component/aws';
 import { COMMIT_TABLE_NAME, REPOSITORY_TABLE_NAME } from '../../config/tables';
 import { Commit, Repository } from '../types';
@@ -35,6 +36,10 @@ const getRepositories = async (): Promise<Repository[]> => {
 
         const items = result.Items.map<Repository>(it => ({
             repoId: it.repoId,
+            name: it.name,
+            description: it.description,
+            createdAt: it.createdAt,
+            active: it.active,
             notification: {
                 type: it.notification.type,
                 ...it.notification,

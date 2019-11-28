@@ -1,8 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
 import moment from 'moment';
+
 import { REPOSITORY_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
+
 import { PingEvent } from '../interfaces';
 
 const logger = LoggerManager.getLogger('register-repository.service');

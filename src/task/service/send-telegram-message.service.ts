@@ -14,6 +14,7 @@ interface Props {
 export const exec = async (props: Props): Promise<any> => {
     const url = `https://api.telegram.org/bot${props.token}/sendMessage`;
 
+    /* eslint-disable @typescript-eslint/camelcase */
     const payload: TelegramPayload = {
         chat_id: props.chatId,
         text: props.text,

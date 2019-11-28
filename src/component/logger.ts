@@ -1,6 +1,8 @@
 import os from 'os';
+
 import winston from 'winston';
 import { TransformableInfo } from 'logform';
+
 import config from '../config/environment';
 
 const appName = module.exports.name;

@@ -1,13 +1,14 @@
 {
   "name": "zani",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "",
   "main": "index.js",
   "scripts": {
     "offline:dev": "bnr offline:dev",
     "invoke:notifier": "bnr invoke:notifier",
     "deploy:prod": "bnr deploy:prod",
-    "deploy:test": "bnr deploy:test"
+    "deploy:test": "bnr deploy:test",
+    "lint": "eslint './src/**/*.ts'"
   },
   "betterScripts": {
     "offline:dev": {
@@ -50,6 +51,8 @@
     "@types/node": "^12.12.6",
     "@types/uuid": "^3.4.6",
     "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
     "better-npm-run": "^0.1.1",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",

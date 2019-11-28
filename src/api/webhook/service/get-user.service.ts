@@ -1,7 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
+
 import { USER_TABLE_NAME } from '../../../config/tables';
 import { ddbClient } from '../../../component/aws';
 import { LoggerManager } from '../../../component/logger';
+
 import { User } from '../interfaces';
 
 const logger = LoggerManager.getLogger('get-user.service');
