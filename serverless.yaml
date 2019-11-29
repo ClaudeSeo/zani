@@ -66,18 +66,18 @@ functions:
     description: 'send notification about commit'
     events:
       - schedule:
-          rate: cron(30 13 * * ? *)
-          description: '1차 안내 메시지 발송 (KST 22시 30분)'
+          rate: cron(00 15 * * ? *)
+          description: '1차 안내 메시지 발송 (KST 00시 00분)'
           input:
             type: 'nudge'
       - schedule:
-          rate: cron(50 14 * * ? *)
-          description: '경고 메시지 발송 (KST 23시 50분)'
+          rate: cron(30 16 * * ? *)
+          description: '경고 메시지 발송 (KST 01시 30분)'
           input:
             type: 'warning'
       - schedule:
-          rate: cron(10 15 * * ? *)
-          description: '시간 초과 안내 메시지 발송 (KST 00시 10분)'
+          rate: cron(00 17 * * ? *)
+          description: '시간 초과 안내 메시지 발송 (KST 02시 00분)'
           input:
             type: 'detect'
 
