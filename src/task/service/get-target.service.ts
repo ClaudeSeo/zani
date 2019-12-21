@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoSelectProvider, OP_SIGN } from 'd2p';
 
 import { ddbClient } from '../../component/aws';
 import { COMMIT_TABLE_NAME, REPOSITORY_TABLE_NAME } from '../../config/tables';
@@ -8,45 +8,29 @@ import { Commit, Repository } from '../types';
 const LIMIT = 100;
 
 const getRepositories = async (): Promise<Repository[]> => {
-    const repositories: Repository[] = [];
-    const payload: DynamoDB.DocumentClient.ScanInput = {
-        TableName: REPOSITORY_TABLE_NAME,
-        FilterExpression: 'attribute_not_exists(#notiType) and #notiType <> :null and #act = :act',
-        ExpressionAttributeNames: {
-            '#notiType': 'notification.type',
-            '#act': 'active',
-        },
-        ExpressionAttributeValues: {
-            ':null': null,
-            ':act': true,
-        },
-        Limit: LIMIT,
-    };
     let hasNext = false;
+    const repositories: Repository[] = [];
+    const provider = new DynamoSelectProvider(ddbClient)
+        .setTableName(REPOSITORY_TABLE_NAME)
+        .addFilterCondition(OP_SIGN.ATTR_NOT_EXISTS, 'notification.type')
+        .addFilterCondition(OP_SIGN.NEQ, 'notification.type', null)
+        .addFilterCondition(OP_SIGN.EQ, 'active', true)
+        .setLimit(LIMIT);
 
     do {
-        const result = await ddbClient.scan(payload).promise();
-        if (!result.Items) {
+        const result = await provider.scan<Repository>();
+        if (!result.items) {
             break;
         }
 
-        if (result.LastEvaluatedKey) {
-            payload['ExclusiveStartKey'] = result.LastEvaluatedKey;
-        }
+        repositories.push(...result.items);
 
-        const items = result.Items.map<Repository>(it => ({
-            repoId: it.repoId,
-            name: it.name,
-            description: it.description,
-            createdAt: it.createdAt,
-            active: it.active,
-            notification: {
-                type: it.notification.type,
-                ...it.notification,
-            },
-        }));
-        repositories.push(...items);
-        hasNext = result.ScannedCount === LIMIT;
+        if (result.lastEvaluatedKey) {
+            provider.setExclusiveStartKey(result.lastEvaluatedKey);
+            hasNext = true;
+        } else {
+            hasNext = false;
+        }
     } while ( hasNext );
 
     return repositories;
@@ -58,23 +42,15 @@ const getCommit = async (repoId: string): Promise<Commit | null> => {
         .hours(2)
         .startOf('hours')
         .valueOf();
-    const payload: DynamoDB.DocumentClient.QueryInput = {
-        TableName: COMMIT_TABLE_NAME,
-        KeyConditionExpression: '#repoId = :repoId and #t > :t',
-        ExpressionAttributeNames: {
-            '#repoId': 'repoId',
-            '#t': 'createdAt',
-        },
-        ExpressionAttributeValues: {
-            ':repoId': repoId,
-            ':t': duration,
-        },
-        Limit: 1,
-    };
+    const result = await new DynamoSelectProvider(ddbClient)
+        .setTableName(COMMIT_TABLE_NAME)
+        .setPrimaryCondition('repoId', repoId)
+        .setSortKeyCondition(OP_SIGN.GT, 'createdAt', duration)
+        .setLimit(1)
+        .query<Commit>();
 
-    const result = await ddbClient.query(payload).promise();
-    if ((result.Items?.length ?? 0) >= 0) {
-        return result.Items![0] as Commit;
+    if ((result.items?.length ?? 0) >= 0) {
+        return result.items[0];
     }
 
     return null;
